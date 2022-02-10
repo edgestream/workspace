@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: workspace
+  name: workspace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: workspace
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: workspace
+    spec:
+      containers:
+      - image: registry.edgestream.net/edgestream/workspace:latest
+        name: workspace
+        resources: {}
+        ports:
+        - name: http
+          containerPort: 8080
+      serviceAccountName: workspace-service-account
