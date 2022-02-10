@@ -36,6 +36,17 @@ RUN apt-get update && apt-get install --yes kubectl
 RUN curl --location https://fluxcd.io/install.sh | bash
 RUN echo "source <(flux completion bash)" >> /etc/skel/.bashrc
 
+# node
+RUN curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
+RUN apt-get update
+RUN apt-get install --yes --no-install-recommends nodejs
+
+# yarn
+RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /usr/share/keyrings/yarnkey.gpg
+RUN echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" > /etc/apt/sources.list.d/yarn.list
+RUN apt-get update
+RUN apt-get install --yes --no-install-recommends yarn
+
 # codespace-theme
 COPY src/etc/profile.d/codespace-theme.sh /etc/profile.d/
 RUN echo "source /etc/profile.d/codespace-theme.sh" >> /etc/skel/.bashrc
