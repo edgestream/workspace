@@ -47,6 +47,12 @@ RUN echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com
 RUN apt-get update
 RUN apt-get install --yes --no-install-recommends yarn
 
+# mongosh
+RUN curl -sL https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add - 2>/dev/null
+RUN echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" > /etc/apt/sources.list.d/mongodb-org-5.0.list
+RUN apt-get update
+RUN apt-get install --yes --no-install-recommends mongodb-mongosh
+
 # codespace-theme
 COPY src/etc/profile.d/codespace-theme.sh /etc/profile.d/
 RUN echo "source /etc/profile.d/codespace-theme.sh" >> /etc/skel/.bashrc
