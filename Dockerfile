@@ -13,6 +13,7 @@ RUN apt-get install --yes sudo
 # add default user
 RUN adduser --gecos 'Default user' --disabled-password ${DEFAULT_USER}
 RUN adduser ${DEFAULT_USER} sudo
+RUN echo "${DEFAULT_USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/10-${DEFAULT_USER}-nopasswd
 
 # dependencies
 RUN apt-get install --yes curl bash-completion

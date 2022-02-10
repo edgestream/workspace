@@ -22,4 +22,12 @@ spec:
         ports:
         - name: http
           containerPort: 8080
+        volumeMounts:
+        - name: workspace-data
+          mountPath: /home/ubuntu
+      volumes:
+      - name: workspace-data
+        persistentVolumeClaim:
+          claimName: workspace-data-pvc
+          readOnly: false  
       serviceAccountName: workspace-service-account
