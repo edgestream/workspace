@@ -7,17 +7,16 @@ IMAGE_VERSION=latest
 DOCKER=/usr/bin/docker
 KUBECTL=/usr/bin/kubectl
 
-all: install
+all: build push install shell
 
-build: image-build image-push
+build: Dockerfile
+	$(DOCKER) build --tag=$(REGISTRY_HOST)/$(REGISTRY_PROJECT)/$(IMAGE_NAME):$(IMAGE_VERSION) .
 
 install:
 	$(KUBECTL) apply --filename=manifest
+	$(KUBECTL) wait --for=condition=available deployment/workspace
 
-image-build: Dockerfile
-	$(DOCKER) build --tag=$(REGISTRY_HOST)/$(REGISTRY_PROJECT)/$(IMAGE_NAME):$(IMAGE_VERSION) .
-
-image-push:
+push:
 	$(DOCKER) push $(REGISTRY_HOST)/$(REGISTRY_PROJECT)/$(IMAGE_NAME):$(IMAGE_VERSION)
 
 uninstall:
@@ -25,3 +24,5 @@ uninstall:
 
 shell:
 	$(KUBECTL) exec --stdin=true --tty=true svc/workspace -- bash
+
+Dockerfile: src/init.sh src/etc/profile.d/codespace-theme.sh

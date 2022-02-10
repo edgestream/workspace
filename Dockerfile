@@ -4,6 +4,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV DEFAULT_USER=ubuntu
 ENV DEFAULT_HOME=/home/${DEFAULT_USER}
 
+# unminimize base system
+RUN yes | unminimize 2>&1
+
 # get package indices
 RUN apt-get update
 
@@ -18,6 +21,12 @@ RUN echo "${DEFAULT_USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/10-${DEFAULT
 # dependencies
 RUN apt-get install --yes curl bash-completion
 
+# vim
+RUN apt-get install --yes vim
+
+# git
+RUN apt-get install --yes git
+
 # kubectl
 RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 RUN echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
@@ -25,10 +34,18 @@ RUN apt-get update && apt-get install --yes kubectl
 
 # flux
 RUN curl --location https://fluxcd.io/install.sh | bash
-RUN echo 'source <(flux completion bash)' >>/home/${DEFAULT_USER}/.bashrc
+RUN echo "source <(flux completion bash)" >> /etc/skel/.bashrc
 
-# run in default user context
+# codespace-theme
+COPY src/etc/profile.d/codespace-theme.sh /etc/profile.d/
+RUN echo "source /etc/profile.d/codespace-theme.sh" >> /etc/skel/.bashrc
+
+# copy init script
+COPY src/* /
+
+# change into default user context
 USER ${DEFAULT_USER}
 WORKDIR ${DEFAULT_HOME}
 
-ENTRYPOINT ["/usr/bin/sleep", "3650d"]
+# entry-point
+ENTRYPOINT ["/usr/bin/bash", "/init.sh"]
