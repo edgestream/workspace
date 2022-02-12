@@ -36,6 +36,10 @@ RUN apt-get update && apt-get install --yes kubectl
 RUN curl --location https://fluxcd.io/install.sh | bash
 RUN echo "source <(flux completion bash)" >> /etc/skel/.bashrc
 
+# kustomize
+RUN curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+RUN mv kustomize /usr/local/bin/
+
 # node
 RUN curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
 RUN apt-get update
