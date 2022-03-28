@@ -74,6 +74,9 @@ RUN apt-get install --yes vim
 # development
 RUN apt-get install --yes git
 
+# codespace theme
+COPY scripts/codespace-theme.sh /etc/profile.d/codespace-theme.sh
+
 # volumes
 VOLUME /root
 
