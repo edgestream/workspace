@@ -67,12 +67,14 @@ RUN apt-get install --yes inetutils-traceroute
 RUN apt-get install --yes dnsutils
 RUN apt-get install --yes spf-tools-perl
 RUN apt-get install --yes swaks
+RUN apt-get install --yes mutt
 
 # editor
 RUN apt-get install --yes vim
 
 # development
 RUN apt-get install --yes git
+RUN apt-get install --yes make
 
 # codespace theme
 COPY scripts/codespace-theme.sh /etc/profile.d/codespace-theme.sh

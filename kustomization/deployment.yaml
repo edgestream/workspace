@@ -40,3 +40,4 @@ spec:
         hostPath:
           path: "/var/run/docker.sock"
       terminationGracePeriodSeconds: 0
+      serviceAccountName: workspace
