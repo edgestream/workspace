@@ -1,8 +1,6 @@
 FROM ubuntu
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV DEFAULT_USER=ubuntu
-ENV DEFAULT_HOME=/home/${DEFAULT_USER}
 
 # unminimize base system
 RUN yes | unminimize 2>&1
@@ -10,31 +8,20 @@ RUN yes | unminimize 2>&1
 # get package indices
 RUN apt-get update
 
-# sudo
-RUN apt-get install --yes sudo
+# installer dependencies
+RUN apt-get install --yes curl gpg
 
-# add default user
-RUN adduser --gecos 'Default user' --disabled-password ${DEFAULT_USER}
-RUN adduser ${DEFAULT_USER} sudo
-RUN echo "${DEFAULT_USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/10-${DEFAULT_USER}-nopasswd
-
-# dependencies
-RUN apt-get install --yes curl bash-completion
-
-# vim
-RUN apt-get install --yes vim
-
-# git
-RUN apt-get install --yes git
+# docker
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu focal stable" > /etc/apt/sources.list.d/docker.list
+RUN apt-get update
+RUN apt-get install --yes docker-ce
 
 # kubectl
 RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 RUN echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
-RUN apt-get update && apt-get install --yes kubectl
-
-# flux
-RUN curl --location https://fluxcd.io/install.sh | bash
-RUN echo "source <(flux completion bash)" >> /etc/skel/.bashrc
+RUN apt-get update
+RUN apt-get install --yes kubectl
 
 # kustomize
 RUN curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
@@ -51,22 +38,50 @@ RUN echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com
 RUN apt-get update
 RUN apt-get install --yes --no-install-recommends yarn
 
+# openjdk
+RUN apt-get install --yes openjdk-11-jdk
+RUN echo "JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/" >> /etc/environment
+
+# maven
+RUN apt-get install --yes maven
+
 # mongosh
 RUN curl -sL https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add - 2>/dev/null
 RUN echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" > /etc/apt/sources.list.d/mongodb-org-5.0.list
 RUN apt-get update
 RUN apt-get install --yes --no-install-recommends mongodb-mongosh
 
-# codespace-theme
-COPY src/etc/profile.d/codespace-theme.sh /etc/profile.d/
-RUN echo "source /etc/profile.d/codespace-theme.sh" >> /etc/skel/.bashrc
+# base
+RUN apt-get install --yes man
 
-# copy init script
-COPY src/* /
+# shell
+RUN apt-get install --yes command-not-found
+RUN apt-get update
 
-# change into default user context
-USER ${DEFAULT_USER}
-WORKDIR ${DEFAULT_HOME}
+# networking
+RUN apt-get install --yes iproute2
+RUN apt-get install --yes inetutils-ftp
+RUN apt-get install --yes inetutils-ping
+RUN apt-get install --yes inetutils-telnet
+RUN apt-get install --yes inetutils-traceroute
+RUN apt-get install --yes dnsutils
+RUN apt-get install --yes spf-tools-perl
+RUN apt-get install --yes swaks
+
+# editor
+RUN apt-get install --yes vim
+
+# development
+RUN apt-get install --yes git
+
+# volumes
+VOLUME /root
+
+# working directory
+WORKDIR /root
+
+# ports
+EXPOSE 8080
 
 # entry-point
-ENTRYPOINT ["/usr/bin/bash", "/init.sh"]
+ENTRYPOINT ["/usr/bin/sleep", "3650d"]

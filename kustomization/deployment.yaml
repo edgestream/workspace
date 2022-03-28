@@ -16,18 +16,27 @@ spec:
         app: workspace
     spec:
       containers:
-      - image: registry.edgestream.net/edgestream/workspace:latest
+      - image: edgestream/workspace:latest
+        imagePullPolicy: Always
         name: workspace
-        resources: {}
+        securityContext: {
+          privileged: true
+        }
         ports:
         - name: http
           containerPort: 8080
         volumeMounts:
         - name: workspace-data
-          mountPath: /home/ubuntu
+          mountPath: /root
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
+          readOnly: false
       volumes:
       - name: workspace-data
         persistentVolumeClaim:
-          claimName: workspace-data-pvc
-          readOnly: false  
-      serviceAccountName: workspace-service-account
+          claimName: workspace-data
+          readOnly: false
+      - name: docker-sock
+        hostPath:
+          path: "/var/run/docker.sock"
+      terminationGracePeriodSeconds: 0
