@@ -6,10 +6,14 @@ metadata:
   name: workspace
 spec:
   ports:
-  - name: http
-    port: 8080
+  - name: ssh
+    port: 22
     protocol: TCP
-    targetPort: http
+    targetPort: ssh
   selector:
     app: workspace
   type: ClusterIP
+  externalIPs:
+  - 2.59.135.54
+  - 2.59.134.144
+  - 193.42.11.58
