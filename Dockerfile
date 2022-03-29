@@ -23,6 +23,9 @@ RUN echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] htt
 RUN apt-get update
 RUN apt-get install --yes kubectl
 
+# helm
+RUN curl -s "https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3" | bash
+
 # kustomize
 RUN curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
 RUN mv kustomize /usr/local/bin/
