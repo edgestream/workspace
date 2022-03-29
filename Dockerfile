@@ -30,6 +30,9 @@ RUN curl -s "https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 RUN curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
 RUN mv kustomize /usr/local/bin/
 
+# flux
+RUN curl -s https://fluxcd.io/install.sh | bash
+
 # node
 RUN curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
 RUN apt-get update
