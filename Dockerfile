@@ -94,5 +94,8 @@ WORKDIR /root
 # ports
 EXPOSE 8080
 
-# entry-point
-ENTRYPOINT ["/usr/bin/sleep", "3650d"]
+# sshd
+RUN apt-get install --yes --no-install-recommends openssh-server
+RUN mkdir /run/sshd
+EXPOSE 22
+ENTRYPOINT /usr/sbin/sshd -D -e
