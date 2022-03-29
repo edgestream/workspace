@@ -2,8 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
+    app: workspace
     cert-manager.io/cluster-issuer: letsencrypt-prod
   name: workspace
+  namespace: default
 spec:
   rules:
   - host: workspace.edgestream.net
