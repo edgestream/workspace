@@ -6,13 +6,13 @@ Workspace as a service
 Run with [docker]:
 
 ```
-docker run --name=workspace --detach edgestream/workspace:latest
+docker run --name=workspace --detach harbor.edgestream.net/library/workspace:latest
 ```
 
 Deploy on [kubernetes] with [kustomize]:
 
 ```
-cd kustomize
+cd kustomization
 kustomize build | kubectl apply -f -
 ```
 
@@ -32,14 +32,14 @@ kubectl exec --stdin=true --tty=true svc/workspace -- bash
 
 ## Build
 
-Use [docker] to build a new custom container image:
+Use [docker] to build a new customized container image:
 
 ```
-docker build --tag=edgestream/workspace:latest .
+docker build --tag=<Your Registry>/workspace:latest .
 ```
 
 Use [docker] to push the new image into the registry:
 
 ```
-docker push edgestream/workspace:latest
+docker push <Your Registry>/workspace:latest
 ```
