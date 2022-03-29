@@ -16,7 +16,7 @@ spec:
         app: workspace
     spec:
       containers:
-      - image: edgestream/workspace:latest
+      - image: harbor.edgestream.net/library/workspace:latest
         imagePullPolicy: Always
         name: workspace
         securityContext: {
@@ -25,6 +25,8 @@ spec:
         ports:
         - name: ssh
           containerPort: 22
+        - name: http
+          containerPort: 8080
         volumeMounts:
         - name: workspace-data
           mountPath: /root
