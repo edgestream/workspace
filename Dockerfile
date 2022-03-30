@@ -2,6 +2,9 @@ FROM ubuntu
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# volumes
+VOLUME /root
+
 # unminimize base system
 RUN yes | unminimize 2>&1
 
@@ -10,6 +13,12 @@ RUN apt-get update
 
 # installer dependencies
 RUN apt-get install --yes curl gpg
+
+# systemd
+RUN apt-get install --yes systemd systemd-sysv dbus dbus-user-session
+
+# ssh
+RUN apt-get install --yes openssh-server
 
 # docker
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -29,6 +38,14 @@ RUN curl -s "https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 # kustomize
 RUN curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
 RUN mv kustomize /usr/local/bin/
+
+# code-server
+RUN curl -sfLO https://github.com/coder/code-server/releases/download/v4.2.0/code-server_4.2.0_amd64.deb \
+&& dpkg -i code-server_4.2.0_amd64.deb \
+&& rm code-server_4.2.0_amd64.deb
+COPY config/code-server.service /lib/systemd/system/code-server.service
+RUN systemctl enable code-server
+EXPOSE 8080
 
 # flux
 RUN curl -s https://fluxcd.io/install.sh | bash
@@ -93,15 +110,8 @@ RUN apt-get install --yes jq
 # codespace theme
 COPY scripts/codespace-theme.sh /etc/profile.d/codespace-theme.sh
 
-# volumes
-VOLUME /root
-
-# entry point
+# working directory
 WORKDIR /root
-EXPOSE 8080
-ENTRYPOINT /usr/bin/code-server --bind-addr 0.0.0.0:8080 --auth password
 
-# code-server
-RUN curl -sfLO https://github.com/coder/code-server/releases/download/v4.2.0/code-server_4.2.0_amd64.deb \
-&& dpkg -i code-server_4.2.0_amd64.deb \
-&& rm code-server_4.2.0_amd64.deb
+# run systemd
+ENTRYPOINT [ "/usr/lib/systemd/systemd", "--system" ]
