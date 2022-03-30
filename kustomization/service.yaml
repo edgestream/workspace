@@ -7,14 +7,10 @@ metadata:
   namespace: default
 spec:
   ports:
-  - name: ssh
-    port: 22
+  - name: http
+    port: 80
     protocol: TCP
-    targetPort: ssh
+    targetPort: http
   selector:
     app: workspace
   type: ClusterIP
-  externalIPs:
-  - 2.59.135.54
-  - 2.59.134.144
-  - 193.42.11.58

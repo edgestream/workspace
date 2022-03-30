@@ -91,11 +91,9 @@ VOLUME /root
 # working directory
 WORKDIR /root
 
-# ports
+# code-server
+RUN curl -sfLO https://github.com/coder/code-server/releases/download/v4.2.0/code-server_4.2.0_amd64.deb \
+&& dpkg -i code-server_4.2.0_amd64.deb \
+&& rm code-server_4.2.0_amd64.deb
 EXPOSE 8080
-
-# sshd
-RUN apt-get install --yes --no-install-recommends openssh-server
-RUN mkdir /run/sshd
-EXPOSE 22
-ENTRYPOINT /usr/sbin/sshd -D -e
+ENTRYPOINT /usr/bin/code-server --bind-addr 127.0.0.1:8080 --auth password
