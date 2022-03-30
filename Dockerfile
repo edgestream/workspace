@@ -80,6 +80,10 @@ RUN curl -sL https://downloads.datastax.com/enterprise/cqlsh-astra-20201104-bin.
 && ln -s /usr/share/dse/cassandra/bin/cqlsh /usr/local/bin/cqlsh \
 && rm -rf cqlsh-astra
 
+# operator-sdk
+RUN curl -sLo /usr/local/bin/operator-sdk https://github.com/operator-framework/operator-sdk/releases/download/v1.18.1/operator-sdk_linux_amd64 \
+&& chmod +x /usr/local/bin/operator-sdk
+
 # base
 RUN apt-get install --yes man
 
