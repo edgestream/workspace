@@ -57,6 +57,12 @@ RUN echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mon
 RUN apt-get update
 RUN apt-get install --yes --no-install-recommends mongodb-mongosh
 
+# cqlsh
+RUN curl -sL https://downloads.datastax.com/enterprise/cqlsh-astra-20201104-bin.tar.gz | tar -xzf - \
+&& mkdir --parents /usr/share/dse/cassandra && mv cqlsh-astra/* /usr/share/dse/cassandra/ \
+&& ln -s /usr/share/dse/cassandra/bin/cqlsh /usr/local/bin/cqlsh \
+&& rm -rf cqlsh-astra
+
 # base
 RUN apt-get install --yes man
 
@@ -71,6 +77,7 @@ RUN apt-get install --yes inetutils-ping
 RUN apt-get install --yes inetutils-telnet
 RUN apt-get install --yes inetutils-traceroute
 RUN apt-get install --yes dnsutils
+RUN apt-get install --yes wget
 RUN apt-get install --yes spf-tools-perl
 RUN apt-get install --yes swaks
 RUN apt-get install --yes mutt
