@@ -88,6 +88,7 @@ RUN apt-get install --yes vim
 # development
 RUN apt-get install --yes git
 RUN apt-get install --yes make
+RUN apt-get install --yes jq
 
 # codespace theme
 COPY scripts/codespace-theme.sh /etc/profile.d/codespace-theme.sh
@@ -95,12 +96,12 @@ COPY scripts/codespace-theme.sh /etc/profile.d/codespace-theme.sh
 # volumes
 VOLUME /root
 
-# working directory
+# entry point
 WORKDIR /root
+EXPOSE 8080
+ENTRYPOINT /usr/bin/code-server --bind-addr 0.0.0.0:8080 --auth password
 
 # code-server
 RUN curl -sfLO https://github.com/coder/code-server/releases/download/v4.2.0/code-server_4.2.0_amd64.deb \
 && dpkg -i code-server_4.2.0_amd64.deb \
 && rm code-server_4.2.0_amd64.deb
-EXPOSE 8080
-ENTRYPOINT /usr/bin/code-server --bind-addr 0.0.0.0:8080 --auth password
