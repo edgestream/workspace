@@ -44,8 +44,7 @@ RUN mv kustomize /usr/local/bin/
 RUN curl -sfLO https://github.com/coder/code-server/releases/download/v4.2.0/code-server_4.2.0_amd64.deb \
 && dpkg -i code-server_4.2.0_amd64.deb \
 && rm code-server_4.2.0_amd64.deb
-COPY config/code-server.service /lib/systemd/system/code-server.service
-RUN systemctl enable code-server
+RUN systemctl enable code-server@root 2>/dev/null
 EXPOSE 8080
 
 # flux
