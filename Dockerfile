@@ -103,4 +103,4 @@ RUN curl -sfLO https://github.com/coder/code-server/releases/download/v4.2.0/cod
 && dpkg -i code-server_4.2.0_amd64.deb \
 && rm code-server_4.2.0_amd64.deb
 EXPOSE 8080
-ENTRYPOINT /usr/bin/code-server --bind-addr 127.0.0.1:8080 --auth password
+ENTRYPOINT /usr/bin/code-server --bind-addr 0.0.0.0:8080 --auth password
