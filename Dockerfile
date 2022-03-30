@@ -19,6 +19,7 @@ RUN apt-get install --yes systemd systemd-sysv dbus dbus-user-session
 
 # ssh
 RUN apt-get install --yes openssh-server
+EXPOSE 22
 
 # docker
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
