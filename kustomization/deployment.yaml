@@ -4,7 +4,6 @@ metadata:
   labels:
     app: workspace
   name: workspace
-  namespace: default
 spec:
   replicas: 1
   selector:
@@ -43,4 +42,3 @@ spec:
         hostPath:
           path: "/var/run/docker.sock"
       terminationGracePeriodSeconds: 0
-      serviceAccountName: workspace

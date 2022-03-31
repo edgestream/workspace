@@ -19,13 +19,14 @@ RUN apt-get install --yes systemd systemd-sysv dbus dbus-user-session
 
 # ssh
 RUN apt-get install --yes openssh-server
+RUN rm /etc/ssh/ssh_host_*_key*
 EXPOSE 22
 
 # docker
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu focal stable" > /etc/apt/sources.list.d/docker.list
 RUN apt-get update
-RUN apt-get install --yes docker-ce
+RUN apt-get install --yes docker-ce-cli
 
 # kubectl
 RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -117,5 +118,5 @@ COPY scripts/codespace-theme.sh /etc/profile.d/codespace-theme.sh
 # working directory
 WORKDIR /root
 
-# run systemd
-ENTRYPOINT [ "/usr/lib/systemd/systemd", "--system" ]
+# execute entrypoint script
+ENTRYPOINT [ "/usr/lib/systemd/systemd", "--system" ] 

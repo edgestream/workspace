@@ -4,7 +4,6 @@ metadata:
   labels:
     app: workspace
   name: workspace-data
-  namespace: default
 spec:
   accessModes:
   - ReadWriteOnce
