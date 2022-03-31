@@ -3,17 +3,28 @@ Workspace as a service
 
 ## Install
 
-Run with [docker]:
+Generate SSH host keys:
 
 ```
-docker run --name=workspace --detach harbor.edgestream.net/library/workspace:latest
+ssh-keygen -q -N "" -t rsa -b 4096 -f ssh_host_rsa_key
 ```
 
-Deploy on [kubernetes] with [kustomize]:
+Create a configmap resource declaration containing the public SSH host key:
 
 ```
-cd kustomization
-kustomize build | kubectl apply -f -
+kubectl create configmap workspace-ssh-host-key-public --from-file=ssh_host_rsa_key.pub --dry-run='client' --output='yaml' > kustomization/configmap.yaml
+```
+
+Create a secret resource declaration containing the private SSH host key:
+
+```
+kubectl create secret generic workspace-ssh-host-key-private --from-file=ssh_host_rsa_key --dry-run='client' --output='yaml' > kustomization/secret.yaml
+```
+
+Create the kustomization and apply it to the cluster:
+
+```
+kustomize build kustomization | kubectl apply -f -
 ```
 
 ## Usage

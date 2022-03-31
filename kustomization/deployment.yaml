@@ -30,9 +30,17 @@ spec:
         volumeMounts:
         - name: workspace-data
           mountPath: /root
-        - mountPath: /var/run/docker.sock
-          name: docker-sock
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
           readOnly: false
+        - name: ssh-host-key-public
+          mountPath: /etc/ssh/ssh_host_rsa_key.pub
+          readOnly: true
+          subPath: ssh_host_rsa_key.pub
+        - name: ssh-host-key-private
+          mountPath: /etc/ssh/ssh_host_rsa_key
+          readOnly: true
+          subPath: ssh_host_rsa_key
       volumes:
       - name: workspace-data
         persistentVolumeClaim:
@@ -41,4 +49,11 @@ spec:
       - name: docker-sock
         hostPath:
           path: "/var/run/docker.sock"
+      - name: ssh-host-key-public
+        configMap:
+          name: workspace-ssh-host-key-public
+      - name: ssh-host-key-private
+        secret:
+          secretName: workspace-ssh-host-key-private
+          defaultMode: 0400
       terminationGracePeriodSeconds: 0
