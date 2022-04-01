@@ -41,6 +41,14 @@ spec:
           mountPath: /etc/ssh/ssh_host_rsa_key
           readOnly: true
           subPath: ssh_host_rsa_key
+        - name: ssh-user-key-public
+          mountPath: /root/.ssh/authorized_keys
+          readOnly: true
+          subPath: authorized_keys
+        - name: ssh-user-key-public
+          mountPath: /root/.ssh/id_rsa.pub
+          readOnly: true
+          subPath: id_rsa.pub
       volumes:
       - name: workspace-data
         persistentVolumeClaim:
@@ -56,4 +64,7 @@ spec:
         secret:
           secretName: workspace-ssh-host-key-private
           defaultMode: 0400
+      - name: ssh-user-key-public
+        configMap:
+          name: workspace-ssh-user-key-public
       terminationGracePeriodSeconds: 0

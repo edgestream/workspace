@@ -8,13 +8,17 @@ Generate SSH host keys:
 ```
 ssh-keygen -q -N "" -t rsa -b 4096 -f ssh_host_rsa_key
 ```
-Create a configmap resource declaration containing the public SSH host key:
+Create a configmap resource containing the public SSH host key:
 ```
-kubectl create configmap workspace-ssh-host-key-public --from-file=ssh_host_rsa_key.pub --dry-run='client' --output='yaml' > kustomization/configmap.yaml
+kubectl create configmap workspace-ssh-host-key-public --from-file=ssh_host_rsa_key.pub
 ```
-Create a secret resource declaration containing the private SSH host key:
+Create a secret resource containing the private SSH host key:
 ```
-kubectl create secret generic workspace-ssh-host-key-private --from-file=ssh_host_rsa_key --dry-run='client' --output='yaml' > kustomization/secret.yaml
+kubectl create secret generic workspace-ssh-host-key-private --from-file=ssh_host_rsa_key
+```
+Create a configmap resource containing the public authorized SSH user keys:
+```
+kubectl create configmap workspace-ssh-user-key-public --from-file id_rsa.pub=$HOME/.ssh/id_rsa.pub --from-file authorized_keys=$HOME/.ssh/id_rsa.pub
 ```
 Create the kustomization and apply it to the cluster:
 ```
