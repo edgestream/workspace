@@ -56,30 +56,4 @@ Push the new container image in a private registry:
 docker login <Your Registry>
 docker push <Your Registry>/workspace:latest
 ```
-Update the deployment spec to use your customized image:
-```
-...
-```
-
-## ROADMAP
-
-### Persist authorized "SSH" keys
-
-- Store "authorized_keys" into a configmap "ssh-user-keys-public"
-- Mount "authorized_keys" into "/root/.ssh/authorized_keys" using proper permissions
-- Write documentation to generate the configmap from "~/.ssh/id_rsa.pub"
-
-### "Visual Studio Code" server
-
-- Use an official workspace image as the base image
-- Add useful extensions like "Kubernetes", "Docker", "German" to the image
-
-### "Helm" chart
-
-- Create a helm chart for easier installation/configuration
-- Publish helm chart via "github" pages/repository
-
-### "Kubernetes" configuration
-
-- Find a way to generate a ".kube/config" configmap for the workspace user restricted to it's namespace
-- Mount the configmap into the user's home directory as ".kube/config"
+Update the deployment spec to use your customized image.
