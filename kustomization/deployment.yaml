@@ -16,7 +16,7 @@ spec:
         app: workspace
     spec:
       containers:
-      - image: harbor.edgestream.net/library/workspace:latest
+      - image: edgestream/workspace:latest
         imagePullPolicy: Always
         name: workspace
         securityContext: {

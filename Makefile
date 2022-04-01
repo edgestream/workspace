@@ -1,5 +1,5 @@
-IMAGE_REGISTRY=harbor.edgestream.net
-IMAGE_PROJECT=library
+IMAGE_REGISTRY=docker.io
+IMAGE_PROJECT=edgestream
 IMAGE_REPOSITORY=workspace
 IMAGE_TAG=latest
 
