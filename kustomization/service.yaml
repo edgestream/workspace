@@ -4,16 +4,15 @@ metadata:
   labels:
     app: workspace
   name: workspace
+  annotations:
+    load-balancer.hetzner.cloud/location: "fsn1"
+    load-balancer.hetzner.cloud/use-private-ip: "false"
 spec:
   ports:
   - name: ssh
-    port: 22
+    port: 2222
     protocol: TCP
     targetPort: ssh
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: http
   selector:
     app: workspace
-  type: ClusterIP
+  type: LoadBalancer

@@ -15,21 +15,34 @@ spec:
       labels:
         app: workspace
     spec:
-      containers:
-      - image: edgestream/workspace:latest
+      initContainers:
+      - name: prepare-workspace-data
+        image: edgestream/workspace:latest
         imagePullPolicy: Always
-        name: workspace
+        command:
+        - /usr/bin/rsync
+        - --recursive
+        - --archive
+        - --update
+        - --verbose
+        - /home/ubuntu/
+        - /mnt
+        volumeMounts:
+        - name: workspace-data
+          mountPath: /mnt
+      containers:
+      - name: ssh-daemon
+        image: edgestream/workspace:latest
+        imagePullPolicy: Always
         securityContext: {
           privileged: true
         }
         ports:
         - name: ssh
           containerPort: 22
-        - name: http
-          containerPort: 8080
         volumeMounts:
         - name: workspace-data
-          mountPath: /root
+          mountPath: /home/ubuntu
         - name: docker-sock
           mountPath: /var/run/docker.sock
           readOnly: false
@@ -42,11 +55,11 @@ spec:
           readOnly: true
           subPath: ssh_host_rsa_key
         - name: ssh-user-key-public
-          mountPath: /root/.ssh/authorized_keys
+          mountPath: /home/ubuntu/.ssh/authorized_keys
           readOnly: true
           subPath: authorized_keys
         - name: ssh-user-key-public
-          mountPath: /root/.ssh/id_rsa.pub
+          mountPath: /home/ubuntu/.ssh/id_rsa.pub
           readOnly: true
           subPath: id_rsa.pub
       volumes:
@@ -67,4 +80,4 @@ spec:
       - name: ssh-user-key-public
         configMap:
           name: workspace-ssh-user-key-public
-      terminationGracePeriodSeconds: 0
+      terminationGracePeriodSeconds: 1
