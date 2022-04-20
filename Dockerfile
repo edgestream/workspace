@@ -33,7 +33,12 @@ ENTRYPOINT /usr/sbin/sshd -D
 RUN adduser --gecos "Default User" --disabled-password ubuntu\
  && adduser ubuntu sudo
 
-ENV EXTRA_PACKAGES="git vim man"
-
-# install extra packages
-RUN apt-get install --yes ${EXTRA_PACKAGES}
+# shell
+RUN apt-get install --yes command-not-found
+RUN apt-get update
+# text
+RUN apt-get install --yes vim man
+# networking
+RUN apt-get install --yes inetutils-ftp inetutils-ping inetutils-talk inetutils-telnet inetutils-tools inetutils-trace bind9-dnsutils
+# scvm
+RUN apt-get install --yes git
