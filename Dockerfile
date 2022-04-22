@@ -39,6 +39,8 @@ RUN apt-get update
 # text
 RUN apt-get install --yes vim man
 # networking
-RUN apt-get install --yes inetutils-ftp inetutils-ping inetutils-talk inetutils-telnet inetutils-tools inetutils-trace bind9-dnsutils
+RUN apt-get install --yes inetutils-ftp inetutils-ping inetutils-talk inetutils-telnet inetutils-tools inetutils-traceroute bind9-dnsutils
 # scvm
 RUN apt-get install --yes git
+# mail
+RUN apt-get install --yes mutt
